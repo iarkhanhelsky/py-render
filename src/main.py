@@ -41,10 +41,17 @@ def draw_line(image, begin, end, color):
         begin = Point(x = end.x, y = end.y)
         end = Point(x = x, y= y)
 
+    (dx, dy) = (end.x - begin.x, end.y - begin.y)
+    derror = abs(dy/dx)
+    error = 0
+    y = begin.y
+
     for x in range(begin.x, end.x):
-        t = (x - begin.x)/ (end.x - begin.x)
-        y = (int) (begin.y * (1 - t) + end.y * t)
         set_pixel(image, (y, x) if steep else (x, y), color)
+        error = error + derror
+        if error > 0.5:
+            y = y + (1 if end.y > begin.y else -1)
+            error = error - 1
 
 
 img = create_image((100, 100))

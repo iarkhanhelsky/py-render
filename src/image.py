@@ -22,14 +22,14 @@ def draw_line(image, begin, end, color):
     '''with given color'''
     steep = False # if line is steep, we transpose the image
     if abs(begin.x - end.x) < abs(begin.y - end.y) :
-        begin = Point(x = begin.y, y = begin.x)
-        end = Point(x = end.y, y = end.x)
+        begin = Point(x = begin.y, y = begin.x, z = begin.z)
+        end = Point(x = end.y, y = end.x, z = end.z)
         steep = True
 
     if begin.x > end.x :
-        (x, y) = begin
-        begin = Point(x = end.x, y = end.y)
-        end = Point(x = x, y= y)
+        (x, y, _) = begin
+        begin = Point(x = end.x, y = end.y, z = begin.z)
+        end = Point(x = x, y= y, z = end.z)
 
     (dx, dy) = (end.x - begin.x, end.y - begin.y)
     derror = abs(dy/dx)

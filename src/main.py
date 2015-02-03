@@ -20,8 +20,7 @@ def draw_model(img, model):
                             map(partial(translate, move = (1, 1, 0)),
                                 map(lambda id: model.verticies[id-1], facet))))
 
-        for segment in combinations((a, b, c), 2):
-            draw_line(img, segment[0], segment[1], White)
+        draw_triangle(img, (a, b, c), White)
 
 
 (width, height) = (500, 500)

@@ -1,5 +1,7 @@
 from PIL import Image
 
+from itertools import combinations
+
 from utils import Black
 from utils import Point
 
@@ -49,3 +51,10 @@ def draw_line(image, begin, end, color):
             if error > 0.5:
                 y = y + (1 if end.y > begin.y else -1)
                 error = error - 1
+
+def draw_triangle(image, points, color):
+    '''Draw triangle with lines of given color'''
+    assert(len(points) is 3)
+
+    for segment in combinations(points, 2):
+        draw_line(image, segment[0], segment[1], color)

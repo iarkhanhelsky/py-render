@@ -1,6 +1,7 @@
 from PIL import Image
 
 from itertools import combinations
+from functools import partial
 
 from utils import Black
 from utils import Point
@@ -52,9 +53,21 @@ def draw_line(image, begin, end, color):
                 y = y + (1 if end.y > begin.y else -1)
                 error = error - 1
 
-def draw_triangle(image, points, color):
+def fill_triangle(image, points, color):
+    assert(len(points) is 3)
+    mid = (points[2][0] - points[0][0], points[2][1] - points[0][1])
+    mid = Point(mid[0], mid[1], 0)
+    if not abs(mid[0] - points[0][0]) < 1:
+        draw_line(image, points[1], mid, color)
+        fill_triangle(image, (points[0], mid, points[2]), color)
+        fill_triangle(image, (mid, points[1], points[2]), color)
+
+def draw_triangle(image, points, color, filled=True):
     '''Draw triangle with lines of given color'''
     assert(len(points) is 3)
 
     for segment in combinations(points, 2):
         draw_line(image, segment[0], segment[1], color)
+
+    if filled:
+        fill_triangle(image, sorted(points, key=partial(lambda x,y: x[y], y=0)), color)

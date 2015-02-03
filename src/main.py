@@ -1,4 +1,5 @@
 from functools import partial
+from itertools import combinations
 
 from image import *
 
@@ -19,9 +20,8 @@ def draw_model(img, model):
                             map(partial(translate, move = (1, 1, 0)),
                                 map(lambda id: model.verticies[id-1], facet))))
 
-        draw_line(img, a, b, White)
-        draw_line(img, b, c, White)
-        draw_line(img, c, a, White)
+        for segment in combinations((a, b, c), 2):
+            draw_line(img, segment[0], segment[1], White)
 
 
 (width, height) = (500, 500)

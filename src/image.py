@@ -15,30 +15,37 @@ def write_image(image, file):
 
 def set_pixel(image, position, color):
     '''Set image pixel color at given position'''
-    image.putpixel(position, color)
+    p = (position[0], image.size[1] - position[1])
+    try:
+        image.putpixel(p, color)
+    except IndexError:
+        print(p)
+        raise
+
 
 def draw_line(image, begin, end, color):
     '''Draw straight line begin point to end point'''
     '''with given color'''
-    steep = False # if line is steep, we transpose the image
-    if abs(begin.x - end.x) < abs(begin.y - end.y) :
-        begin = Point(x = begin.y, y = begin.x, z = begin.z)
-        end = Point(x = end.y, y = end.x, z = end.z)
-        steep = True
+    if not (begin.x == end.x and begin.y == end.y):
+        steep = False # if line is steep, we transpose the image
+        if abs(begin.x - end.x) < abs(begin.y - end.y) :
+            begin = Point(x = begin.y, y = begin.x, z = begin.z)
+            end = Point(x = end.y, y = end.x, z = end.z)
+            steep = True
 
-    if begin.x > end.x :
-        (x, y, _) = begin
-        begin = Point(x = end.x, y = end.y, z = begin.z)
-        end = Point(x = x, y= y, z = end.z)
+        if begin.x > end.x :
+            (x, y, _) = begin
+            begin = Point(x = end.x, y = end.y, z = begin.z)
+            end = Point(x = x, y= y, z = end.z)
 
-    (dx, dy) = (end.x - begin.x, end.y - begin.y)
-    derror = abs(dy/dx)
-    error = 0
-    y = begin.y
+        (dx, dy) = (end.x - begin.x, end.y - begin.y)
+        derror = abs(dy/dx)
+        error = 0
+        y = begin.y
 
-    for x in range(begin.x, end.x):
-        set_pixel(image, (y, x) if steep else (x, y), color)
-        error = error + derror
-        if error > 0.5:
-            y = y + (1 if end.y > begin.y else -1)
-            error = error - 1
+        for x in range(begin.x, end.x):
+            set_pixel(image, (y, x) if steep else (x, y), color)
+            error = error + derror
+            if error > 0.5:
+                y = y + (1 if end.y > begin.y else -1)
+                error = error - 1

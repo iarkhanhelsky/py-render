@@ -3,13 +3,8 @@ import re
 
 from utils import Point
 
-float_rx = '[+-]?((?\d+)|(\d+\.\d+))(?[eE][+-]?\d+)'
 
 Model = namedtuple("Model", "facets verticies")
-
-def flt(f):
-    print(f)
-    return float(f)
 
 def parse(file):
 
@@ -18,9 +13,20 @@ def parse(file):
 
     for line in open(file):
         if (re.match('v .*', line)):
-            point = [flt(f) for f in re.findall(float_rx, line)]
+            point = list(map(float, parse_floats(line)))
             verticies.append(Point(x = point[0], y = point[1], z = point[2]))
         elif (re.match('f .*', line)):
             facets.append(map(int, map(lambda tri: re.findall('\d+', tri)[0], re.findall('\d+\/\d+\/\d+', line))))
 
     return Model(facets, verticies)
+
+
+def parse_floats(line):
+    float_rx = '[+-]?(?:(?:\d+)?\.?\d+)(?:[eE][+-]\d+)?'
+    return list(map(float, re.findall(float_rx, line)))
+
+
+if '__main__' == __name__:
+    #print(parse_floats('1 -1 1.0 0.123 0.1234e-24'))
+    assert all([ abs(x - y) < 0.00000001 for x in parse_floats('1 -1 1.0 0.123 0.1234e-24') for y in [1, -1, 1, 0.123, 0.123e-24]])
+

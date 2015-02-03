@@ -1,3 +1,5 @@
+from functools import partial
+
 from image import *
 
 from utils import Color
@@ -12,8 +14,10 @@ from model import parse
 
 def draw_model(img, model):
     for facet in model.facets:
-        f = list(facet)
-        (a, b, c) = map(lambda p: translate(p, (5, 5, 0)), map(lambda p: scale(p, ((width - 10) / 2, (height - 10) / 2 , 0)), map(lambda p: translate(p, (1, 1, 0)), map(lambda id: model.verticies[id-1], f))))
+        (a, b, c) = map(partial(translate, move=(5, 5, 0)),
+                        map(partial(scale, scale = ((width - 10) / 2, (height - 10) / 2 , 0)),
+                            map(partial(translate, move = (1, 1, 0)),
+                                map(lambda id: model.verticies[id-1], facet))))
 
         draw_line(img, a, b, White)
         draw_line(img, b, c, White)

@@ -59,10 +59,10 @@ def fill_triangle(image, points, color):
     (a,b,c) = points
 
     a_c_mid = Point(int(a.x + (c.x - a.x) / 2), int(a.y + (c.y - a.y) / 2), 0)
-    if (a.x != a_c_mid.x and c.x != a_c_mid.x):
+    if (abs(a.x - c.x) > 1 or abs(a.y - c.y) > 1):
         draw_line(image, a_c_mid, b, color)
-        fill_triangle(image, (a, b, a_c_mid), color)
-        fill_triangle(image, (c, b, a_c_mid), color)
+        fill_triangle(image, (a, a_c_mid, b), color)
+        fill_triangle(image, (c, a_c_mid, b), color)
 
 def draw_triangle(image, points, color, filled=True):
     '''Draw triangle with lines of given color'''

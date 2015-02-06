@@ -28,6 +28,3 @@ img = create_image((width, height))
 model = parse('../obj/african_head.obj')
 draw_model(img, model)
 write_image(img, '../out/head.tga')
-
-
-
